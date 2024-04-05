@@ -127,6 +127,7 @@ public class Database {
             connection.setAutoCommit(false);
             Statement queryStatement = connection.createStatement();
             
+            //QUERY BUILDING
             String queryStart = "INSERT INTO public." + table + "(";
             String columnsString = "";
             for(int i=0; i<columns.size(); i++)
@@ -149,19 +150,26 @@ public class Database {
             valuesString += ")";
 
             System.out.println(queryStart + columnsString + valuesString);
-
             queryStatement.executeUpdate(queryStart + columnsString + valuesString);
             
+            //Closing
             connection.commit();
             queryStatement.close();
-            connection.close();
-
             
-            return 0;
+            Statement lastIdQuery = connection.createStatement();
+            ResultSet set = lastIdQuery.executeQuery("SELECT ID FROM SONGS ORDER BY ID DESC LIMIT 1");
+            Integer lastID = 0;
+            while (set.next()) {
+                lastID = Integer.valueOf(set.getInt(1));
+            }
+            lastIdQuery.close();
+            set.close();
+            connection.close();           
+            return lastID;
 
         } catch (SQLException e) {
             System.out.println("Errore connessione database " + e);
-            return 1;
+            return -1;
         }
     }
     

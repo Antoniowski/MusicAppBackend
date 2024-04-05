@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class SongController 
 {
 
+    private final String LOCAL_IMAGE_PATH = "src/main/java/com/musicapi/MusicAPIProject/sftp/resources/images/";
+    private final String LOCAL_MUSIC_PATH = "src/main/java/com/musicapi/MusicAPIProject/sftp/resources/music/";
+
     private SongService songService;
 
     @Autowired
@@ -61,7 +64,7 @@ public class SongController
     }
 
     @PostMapping("/song")
-    public String addSong(@RequestParam String name, String album)
+    public String addSong(@RequestParam String name, String album, String imageName)
     {
         String nameString = name;
         String albumString = album;
@@ -71,7 +74,7 @@ public class SongController
         if(name == null)
             return "ERROR";
 
-        Integer result = this.songService.addSong("'"+nameString+"'", albumString);
+        Integer result = this.songService.addSong("'"+nameString+"'", albumString, LOCAL_IMAGE_PATH+imageName, "");
         if(result == 0)
             return "200";
 

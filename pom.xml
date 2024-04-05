@@ -36,6 +36,11 @@
         	<artifactId>postgresql</artifactId>
         	<version>42.2.29</version>
     	</dependency>
+		<dependency>
+			<groupId>com.hierynomus</groupId>
+			<artifactId>sshj</artifactId>
+			<version>0.38.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

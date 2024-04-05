@@ -1,0 +1,9 @@
+version: '3'
+services:
+  sftp: 
+    image: "emberstack/sftp"
+    ports:
+      - "22:22"
+    volumes:
+      - ../SFTPDocker/configurationSFTP.json:/app/config/sftp.json:ro
+      - ./musicappfolder/:/home/musicApp/sftp

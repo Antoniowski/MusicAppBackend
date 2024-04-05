@@ -2,17 +2,13 @@ package com.musicapi.MusicAPIProject.service;
 import com.musicapi.MusicAPIProject.api.model.Album;
 import com.musicapi.MusicAPIProject.api.model.Song;
 import com.musicapi.MusicAPIProject.database.Database;
-
-import java.lang.reflect.Array;
-import java.sql.SQLException;
+import com.musicapi.MusicAPIProject.sftp.Sftp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.xml.crypto.Data;
-
-import org.springframework.boot.jdbc.DatabaseDriver;
 import org.springframework.stereotype.Service;
+
+
 
 
 @Service
@@ -74,11 +70,18 @@ public class SongService{
         }
     }
 
-    public Integer addSong(String name, String album)
+    public Integer addSong(String name, String album, String imagePath, String musicPath)
     {
         try{
+            //DATABASE INSERT
             Database database = Database.getInstance();
-            database.insert("songs", Arrays.asList("name", "duration", "album"), Arrays.asList(name, "60", "1"));
+            Integer lastID = database.insert("songs", Arrays.asList("name", "duration", "album"), Arrays.asList(name, "60", "1"));
+
+            //ADD SONG TO SFTP SERVER
+            Sftp sftp = Sftp.getInstance();
+            sftp.makeDirectory(lastID.toString());
+            sftp.uploadFile(imagePath, lastID.toString(), "image.png");
+
             return 0;
         }catch (Exception e){
             return -1;
